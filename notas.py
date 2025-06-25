@@ -8,6 +8,7 @@ def listar_notas():
     try:
         data_inicio = request.args.get('inicio')  # formato: AAAA-MM-DD
         data_fim = request.args.get('fim')        # opcional
+        numero_nota = request.args.get('numero')  # novo filtro opcional
 
         conn = conectar()
         cursor = conn.cursor()
@@ -25,12 +26,16 @@ def listar_notas():
         """
 
         params = []
-        if data_inicio and data_fim:
+        if numero_nota:
+            query += " AND n.NOTA_FISCA = ?"
+            params.append(numero_nota)
+        elif data_inicio and data_fim:
             query += " AND n.DT_EMISSAO BETWEEN ? AND ?"
             params.extend([data_inicio, data_fim])
         elif data_inicio:
             query += " AND n.DT_EMISSAO >= ?"
             params.append(data_inicio)
+        # Se não houver data_inicio, não filtra por data, mesmo que data_fim exista
 
         query += " ORDER BY n.DT_EMISSAO DESC"
 
