@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Consultas API</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+    }
+    input, button, select {
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+    .consulta {
+      margin-bottom: 2rem;
+      padding: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    #resultado, #resultadoNotas {
+      margin-top: 1.5rem;
+      background-color: #f2f2f2;
+      padding: 1rem;
+      border-radius: 5px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="consulta">
+    <h2>🔍 Consulta de Produto por Código</h2>
+
+  <label for="codigo">Código do Produto:</label>
+  <input type="text" id="codigo" placeholder="Ex: D30756">
+  <button onclick="consultarProduto()">Consultar</button>
+
+  <div id="resultado"></div>
+
+  </script>
+
+  <div class="consulta">
+    <h2>📄 Consulta de Notas Fiscais</h2>
+    <label for="dataInicio">Data Início:</label>
+    <input type="date" id="dataInicio">
+    <label for="dataFim">Data Fim (opcional):</label>
+    <input type="date" id="dataFim">
+    <button onclick="consultarNotas()">Consultar</button>
+    <div id="resultadoNotas"></div>
+  </div>
+
+  <script>
+    async function consultarProduto() {
+      const codigo = document.getElementById('codigo').value.trim();
+      const resultadoDiv = document.getElementById('resultado');
+      
+      if (!codigo) {
+        resultadoDiv.textContent = "Digite um código válido.";
+        return;
+      }
+
+      resultadoDiv.textContent = "Consultando...";
+
+      try {
+        const response = await fetch(`http://localhost:5000/api/produto/${codigo}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          resultadoDiv.textContent = JSON.stringify(data, null, 2);
+        } else {
+          resultadoDiv.textContent = data.mensagem || data.erro || "Erro desconhecido";
+        }
+      } catch (error) {
+        resultadoDiv.textContent = "Erro ao conectar à API.";
+      }
+    }
+
+    async function consultarNotas() {
+      const inicio = document.getElementById('dataInicio').value;
+      const fim = document.getElementById('dataFim').value;
+      const resultadoDiv = document.getElementById('resultadoNotas');
+
+      if (!inicio) {
+        resultadoDiv.textContent = "Informe a data de início.";
+        return;
+      }
+
+      resultadoDiv.textContent = "Consultando...";
+
+      try {
+        let url = `http://localhost:5000/api/notas-entrada?inicio=${inicio}`;
+        if (fim) url += `&fim=${fim}`;
+        
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (response.ok) {
+          resultadoDiv.textContent = JSON.stringify(data, null, 2);
+        } else {
+          resultadoDiv.textContent = data.erro || "Erro desconhecido";
+        }
+      } catch (error) {
+        resultadoDiv.textContent = "Erro ao conectar à API.";
+      }
+    }
+  </script>
+</body>
+</html>
