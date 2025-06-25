@@ -46,7 +46,16 @@
     <label for="dataFim">Data Fim (opcional):</label>
     <input type="date" id="dataFim">
     <button onclick="consultarNotas()">Consultar</button>
+    <button onclick="consultarTodasNotas()">Todas as Notas</button>
     <div id="resultadoNotas"></div>
+  </div>
+
+  <div class="consulta">
+    <h2>📦 Consulta de Produtos da Nota</h2>
+    <label for="numeroNota">Número da Nota:</label>
+    <input type="text" id="numeroNota" placeholder="Ex: 00021839">
+    <button onclick="consultarProdutosDaNota()">Consultar</button>
+    <div id="resultadoProdutosNota"></div>
   </div>
 
   <script>
@@ -95,9 +104,52 @@
         const data = await response.json();
 
         if (response.ok) {
-          resultadoDiv.textContent = JSON.stringify(data, null, 2);
+          let qtd = Array.isArray(data) ? data.length : 0;
+          resultadoDiv.textContent = `Registros encontrados: ${qtd}\n` + JSON.stringify(data, null, 2);
         } else {
           resultadoDiv.textContent = data.erro || "Erro desconhecido";
+        }
+      } catch (error) {
+        resultadoDiv.textContent = "Erro ao conectar à API.";
+      }
+    }
+
+    async function consultarTodasNotas() {
+      const resultadoDiv = document.getElementById('resultadoNotas');
+      resultadoDiv.textContent = "Consultando...";
+      try {
+        const response = await fetch('http://localhost:5000/api/notas-entrada');
+        const data = await response.json();
+        if (response.ok) {
+          let qtd = Array.isArray(data) ? data.length : 0;
+          resultadoDiv.textContent = `Registros encontrados: ${qtd}\n` + JSON.stringify(data, null, 2);
+        } else {
+          resultadoDiv.textContent = data.erro || "Erro desconhecido";
+        }
+      } catch (error) {
+        resultadoDiv.textContent = "Erro ao conectar à API.";
+      }
+    }
+
+    async function consultarProdutosDaNota() {
+      const numeroNota = document.getElementById('numeroNota').value.trim();
+      const resultadoDiv = document.getElementById('resultadoProdutosNota');
+      
+      if (!numeroNota) {
+        resultadoDiv.textContent = "Digite um número de nota válido.";
+        return;
+      }
+
+      resultadoDiv.textContent = "Consultando...";
+
+      try {
+        const response = await fetch(`http://localhost:5000/api/produtos-da-nota/${numeroNota}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          resultadoDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        } else {
+          resultadoDiv.textContent = data.mensagem || data.erro || "Erro desconhecido";
         }
       } catch (error) {
         resultadoDiv.textContent = "Erro ao conectar à API.";

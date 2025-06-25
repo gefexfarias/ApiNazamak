@@ -9,7 +9,7 @@ produto_bp = Blueprint('produto_bp', __name__)
 @produto_bp.route('/api/produto/<codigo_produto>', methods=['GET'])
 def saldo_produto(codigo_produto):
     """
-    Endpoint para consultar saldo e informações de um produto
+    Endpoint para consultar saldo e informações de um produto, incluindo conversões
     
     Args:
         codigo_produto (str): Código do produto a ser consultado
@@ -42,12 +42,24 @@ def saldo_produto(codigo_produto):
 
         cursor.execute(query, (codigo_produto.upper(),))
         row = cursor.fetchone()
-        conn.close()
 
         if row:
             colunas = [desc[0] for desc in cursor.description]
-            return jsonify(dict(zip(colunas, row)))
+            produto_dict = dict(zip(colunas, row))
+
+            # Buscar conversões do produto
+            query_conv = """
+                SELECT CONVERSAO
+                FROM [Conversao de itens]
+                WHERE UCASE(CODIGO) = ?
+            """
+            cursor.execute(query_conv, (codigo_produto.upper(),))
+            conversoes = [conv[0] for conv in cursor.fetchall()]
+            produto_dict["Conversoes"] = conversoes
+            conn.close()
+            return jsonify(produto_dict)
         else:
+            conn.close()
             return jsonify({"mensagem": "Produto não encontrado."}), 404
     except Exception as e:
         return jsonify({"erro": str(e)}), 500
