@@ -26,10 +26,11 @@ def saldo_produto(codigo_produto):
         query = """
             SELECT 
                 p.CODIGO AS CodigoProduto,
-                p.PRODUTO AS Descricao,                                
+                p.PRODUTO AS Descricao,
+                p.LOCACAO AS Locacao,                                
                 SUM(
                     IIF(n.ENT_OU_SAI IN ('E','N','Y','Z'), m.QTDE,
-                    IIF(n.ENT_OU_SAI IN ('B','H','P','R','S','D'), -m.QTDE, 0))
+                    IIF(n.ENT_OU_SAI IN ('B','H','P','R','S','V'), -m.QTDE, 0))
                 ) AS Saldo
             FROM ([Movimentacao dos itens] AS m
             INNER JOIN [Notas fiscais] AS n 
@@ -37,7 +38,7 @@ def saldo_produto(codigo_produto):
             INNER JOIN [Tabela de Pecas] AS p 
                 ON m.CODIGO = p.CODIGO 
             WHERE UCASE(p.CODIGO) = ? 
-            GROUP BY p.CODIGO, p.PRODUTO, p.UNID, p.LINHA
+            GROUP BY p.CODIGO, p.PRODUTO, p.UNID, p.LINHA, p.LOCACAO
         """
 
         cursor.execute(query, (codigo_produto.upper(),))
