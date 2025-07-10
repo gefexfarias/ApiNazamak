@@ -6,7 +6,7 @@ Tabela: Bancos
 Campo: CHAVE DO BANCO | Tipo: Texto | Tamanho: 255
 Campo: NOME DO BANCO | Tipo: Texto | Tamanho: 255
 Campo: Email | Tipo: Texto | Tamanho: 255
-Campo: Ativo | Tipo: Sim/Não | Tamanho: -
+Campo: Ativo | Tipo: Sim/Nao | Tamanho: -
 
 Tabela: Cadastro de Empresas
 ------------------------------
@@ -25,16 +25,16 @@ Campo: Numero do cheque | Tipo: Texto | Tamanho: 6
 Campo: Nome do Cheque | Tipo: Texto | Tamanho: 50
 Campo: Vencimento | Tipo: Data/Hora | Tamanho: -
 Campo: Valor | Tipo: Moeda | Tamanho: -
-Campo: Situação | Tipo: Sim/Não | Tamanho: -
+Campo: Situacao | Tipo: Sim/Nao | Tamanho: -
 Campo: OBS | Tipo: Texto | Tamanho: 50
-Campo: Conferido | Tipo: Sim/Não | Tamanho: -
+Campo: Conferido | Tipo: Sim/Nao | Tamanho: -
 
 Tabela: Cidades
 ------------------------------
 Campo: CODIGO DA CIDADE | Tipo: Longo | Tamanho: -
 Campo: CIDADE | Tipo: Texto | Tamanho: 255
 
-Tabela: Classificação Fiscal
+Tabela: Classificacao Fiscal
 ------------------------------
 Campo: CF | Tipo: Texto | Tamanho: 8
 Campo: IST | Tipo: Double | Tamanho: -
@@ -48,14 +48,14 @@ Campo: VENCIMENTO | Tipo: Data/Hora | Tamanho: -
 Campo: VALOR_ | Tipo: Double | Tamanho: -
 Campo: PAGAMENTO | Tipo: Data/Hora | Tamanho: -
 Campo: VALOR_PAGO | Tipo: Double | Tamanho: -
-Campo: BOLETO | Tipo: Sim/Não | Tamanho: -
-Campo: CARTAO | Tipo: Sim/Não | Tamanho: -
+Campo: BOLETO | Tipo: Sim/Nao | Tamanho: -
+Campo: CARTAO | Tipo: Sim/Nao | Tamanho: -
 
 Tabela: Conversao de itens
 ------------------------------
 Campo: CODIGO | Tipo: Texto | Tamanho: 30
 Campo: CONVERSAO | Tipo: Texto | Tamanho: 30
-Campo: NRO_PRINCIPAL | Tipo: Sim/Não | Tamanho: -
+Campo: NRO_PRINCIPAL | Tipo: Sim/Nao | Tamanho: -
 
 Tabela: Erros ao colar
 ------------------------------
@@ -94,7 +94,7 @@ Campo: INSCRICAO | Tipo: Texto | Tamanho: 14
 Campo: CONTATO | Tipo: Texto | Tamanho: 25
 Campo: SETOR | Tipo: Texto | Tamanho: 25
 Campo: EMAIL | Tipo: Texto | Tamanho: 60
-Campo: CORRESPONDENCIA | Tipo: Sim/Não | Tamanho: -
+Campo: CORRESPONDENCIA | Tipo: Sim/Nao | Tamanho: -
 Campo: Observacoes | Tipo: Memo | Tamanho: 0
 Campo: indIEDest | Tipo: Inteiro | Tamanho: -
 Campo: apelido | Tipo: Texto | Tamanho: 60
@@ -124,7 +124,7 @@ Campo: ICMS_vAntecipado | Tipo: Double | Tamanho: -
 
 Tabela: Municipio
 ------------------------------
-Campo: Município | Tipo: Texto | Tamanho: 255
+Campo: MunicÃ­pio | Tipo: Texto | Tamanho: 255
 Campo: NomeMunic | Tipo: Texto | Tamanho: 255
 Campo: UF | Tipo: Texto | Tamanho: 255
 Campo: NomeUF | Tipo: Texto | Tamanho: 255
@@ -151,9 +151,9 @@ Campo: NRO_CONHEC | Tipo: Texto | Tamanho: 8
 Campo: DTA_CONHEC | Tipo: Data/Hora | Tamanho: -
 Campo: POSICAO DO FRETE | Tipo: Texto | Tamanho: 1
 Campo: OBSERVACOES | Tipo: Memo | Tamanho: 0
-Campo: IMPRIMECODIGO | Tipo: Sim/Não | Tamanho: -
-Campo: POSICAONOTABALCAO | Tipo: Sim/Não | Tamanho: -
-Campo: BOLETO | Tipo: Sim/Não | Tamanho: -
+Campo: IMPRIMECODIGO | Tipo: Sim/Nao | Tamanho: -
+Campo: POSICAONOTABALCAO | Tipo: Sim/Nao | Tamanho: -
+Campo: BOLETO | Tipo: Sim/Nao | Tamanho: -
 Campo: tpNF | Tipo: Inteiro | Tamanho: -
 Campo: indPag | Tipo: Inteiro | Tamanho: -
 Campo: indPres | Tipo: Inteiro | Tamanho: -
@@ -175,11 +175,11 @@ Campo: bandeiraCartao | Tipo: Inteiro | Tamanho: -
 
 Tabela: Pecas recuperadas
 ------------------------------
-Campo: Códigomarcação | Tipo: Longo | Tamanho: -
+Campo: CÃ³digomarcaÃ§Ã£o | Tipo: Longo | Tamanho: -
 Campo: Dataentrega | Tipo: Data/Hora | Tamanho: -
 Campo: CHAVE CLIENTE_FORNEC | Tipo: Longo | Tamanho: -
 Campo: Valor | Tipo: Double | Tamanho: -
-Campo: Observações | Tipo: Memo | Tamanho: 0
+Campo: ObservÃ§Ãµes | Tipo: Memo | Tamanho: 0
 
 Tabela: Tabela de CFOP
 ------------------------------
@@ -198,8 +198,8 @@ Campo: gera listagem | Tipo: Texto | Tamanho: 1
 Campo: gera historico saida | Tipo: Texto | Tamanho: 1
 Campo: gera historico entrada | Tipo: Texto | Tamanho: 1
 Campo: descricao impressa | Tipo: Texto | Tamanho: 15
-Campo: super simples peca | Tipo: Sim/Não | Tamanho: -
-Campo: super simples servico | Tipo: Sim/Não | Tamanho: -
+Campo: super simples peca | Tipo: Sim/Nao | Tamanho: -
+Campo: super simples servico | Tipo: Sim/Nao | Tamanho: -
 Campo: tpNF | Tipo: Inteiro | Tamanho: -
 Campo: indPag | Tipo: Inteiro | Tamanho: -
 Campo: indPres | Tipo: Inteiro | Tamanho: -
@@ -250,15 +250,15 @@ Campo: cest | Tipo: Texto | Tamanho: 255
 
 Tabela: tblChaveNfeEntrada
 ------------------------------
-Campo: Código | Tipo: Longo | Tamanho: -
+Campo: Cï¿½digo | Tipo: Longo | Tamanho: -
 Campo: ChaveNfe | Tipo: Texto | Tamanho: 44
 
 Tabela: tblCondPagamento
 ------------------------------
 Campo: ID_condPagto | Tipo: Texto | Tamanho: 2
 Campo: descricao | Tipo: Texto | Tamanho: 50
-Campo: parcelado | Tipo: Sim/Não | Tamanho: -
-Campo: mostrar | Tipo: Sim/Não | Tamanho: -
+Campo: parcelado | Tipo: Sim/Nao | Tamanho: -
+Campo: mostrar | Tipo: Sim/Nao | Tamanho: -
 
 Tabela: tblCSOSN
 ------------------------------
@@ -375,7 +375,7 @@ Campo: dhProtocolo | Tipo: Texto | Tamanho: 255
 Campo: nProtocoloCanc | Tipo: Texto | Tamanho: 255
 Campo: dProtocoloCanc | Tipo: Texto | Tamanho: 255
 Campo: procCancNFe | Tipo: Texto | Tamanho: 255
-Campo: danfeimpresso | Tipo: Sim/Não | Tamanho: -
+Campo: danfeimpresso | Tipo: Sim/Nao | Tamanho: -
 
 Tabela: tblPrazoPagamento
 ------------------------------
@@ -448,10 +448,10 @@ Tabela Pai: Cadastro de Empresas (codigo da loja) --> Tabela Filha: Notas fiscai
 Tabela Pai: Fornecedores e Clientes (CHAVE CLIENTE_FORNEC) --> Tabela Filha: Notas fiscais (CHAVE CLIENTE_FORNEC)
 Tabela Pai: Fornecedores e Clientes (CHAVE CLIENTE_FORNEC) --> Tabela Filha: tblFone (id_ClienteFornec)
 Tabela Pai: Linha (codigo) --> Tabela Filha: tblMaquinas (linha)
-Tabela Pai: Municipio (Município) --> Tabela Filha: Fornecedores e Clientes (codigo Municipio)
+Tabela Pai: Municipio (MunicÃ­pio) --> Tabela Filha: Fornecedores e Clientes (codigo Municipio)
 Tabela Pai: Notas fiscais (CHAVE NOTA FISCAL) --> Tabela Filha: Contas a pagar/receber (CHAVE NOTA FISCAL)
 Tabela Pai: Notas fiscais (CHAVE NOTA FISCAL) --> Tabela Filha: Movimentacao dos itens (CHAVE NOTA FISCAL)
-Tabela Pai: Notas fiscais (CHAVE NOTA FISCAL) --> Tabela Filha: tblChaveNfeEntrada (Código)
+Tabela Pai: Notas fiscais (CHAVE NOTA FISCAL) --> Tabela Filha: tblChaveNfeEntrada (Cï¿½digo)
 Tabela Pai: Notas fiscais (CHAVE NOTA FISCAL) --> Tabela Filha: tblDetImpostos (CHAVE NOTA FISCAL)
 Tabela Pai: Notas fiscais (CHAVE NOTA FISCAL) --> Tabela Filha: tblNfe (CHAVE NOTA FISCAL)
 Tabela Pai: Tabela de naturezas (natureza) --> Tabela Filha: Notas fiscais (ENT_OU_SAI)

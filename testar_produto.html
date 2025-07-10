@@ -323,7 +323,8 @@
 
   <script>
     async function consultarProduto() {
-      const codigo = document.getElementById('codigo').value.trim();
+      const codigoInput = document.getElementById('codigo');
+      const codigo = codigoInput.value.trim();
       const resultadoDiv = document.getElementById('resultado');
       if (!codigo) {
         resultadoDiv.textContent = "Digite um código válido.";
@@ -331,10 +332,13 @@
       }
       resultadoDiv.innerHTML = '<div class="spinner"></div>';
       try {
-        const response = await fetch(`http://localhost:5000/api/produto/${codigo}`);
+        const response = await fetch(`http://localhost:5000/api/produto/${encodeURIComponent(codigo)}`);
         const data = await response.json();
         if (response.ok) {
           if (data.CodigoProduto) {
+            if (data.CodigoProduto && data.CodigoProduto.toUpperCase() !== codigo.toUpperCase()) {
+              codigoInput.value = data.CodigoProduto;
+            }
             resultadoDiv.innerHTML = `
               <div class='produto-view'>
                 <div class='produto-view-row'><span class='produto-view-label'>Código:</span><span class='produto-view-value'>${data.CodigoProduto}</span></div>
@@ -350,12 +354,12 @@
               </div>
             `;
           } else if (data.mensagem) {
-            resultadoDiv.textContent = data.mensagem;
+            resultadoDiv.innerHTML = `<div style='color:#b71c1c;font-weight:bold;'>${data.mensagem}</div>${data.erro ? `<div style='color:#888;font-size:0.9em;'>${data.erro}</div>` : ''}`;
           } else {
-            resultadoDiv.textContent = "Produto não encontrado.";
+            resultadoDiv.innerHTML = `<div style='color:#b71c1c;font-weight:bold;'>Produto não encontrado.</div>`;
           }
         } else {
-          resultadoDiv.textContent = data.mensagem || data.erro || "Erro desconhecido";
+          resultadoDiv.innerHTML = `<div style='color:#b71c1c;font-weight:bold;'>${data.mensagem || "Erro desconhecido"}</div>${data.erro ? `<div style='color:#888;font-size:0.9em;'>${data.erro}</div>` : ''}`;
         }
       } catch (error) {
         resultadoDiv.textContent = "Erro ao conectar à API.";
@@ -379,7 +383,7 @@
         if (response.ok) {
           resultadoDiv.innerHTML = renderTabelaNotas(data);
         } else {
-          resultadoDiv.textContent = data.erro || "Erro desconhecido";
+          resultadoDiv.innerHTML = `<div style='color:#b71c1c;font-weight:bold;'>${data.mensagem || data.erro || "Erro desconhecido"}</div>${data.erro ? `<div style='color:#888;font-size:0.9em;'>${data.erro}</div>` : ''}`;
         }
       } catch (error) {
         resultadoDiv.textContent = "Erro ao conectar à API.";
@@ -439,7 +443,7 @@
         if (response.ok) {
           resultadoDiv.innerHTML = renderTabelaNotas(data);
         } else {
-          resultadoDiv.textContent = data.erro || "Erro desconhecido";
+          resultadoDiv.innerHTML = `<div style='color:#b71c1c;font-weight:bold;'>${data.mensagem || data.erro || "Erro desconhecido"}</div>${data.erro ? `<div style='color:#888;font-size:0.9em;'>${data.erro}</div>` : ''}`;
         }
       } catch (error) {
         resultadoDiv.textContent = "Erro ao conectar à API.";
@@ -471,7 +475,7 @@
         html += renderTabelaProdutosNota(produtos);
         resultadoDiv.innerHTML = html;
       } catch (error) {
-        resultadoDiv.textContent = "Erro ao conectar à API.";
+        resultadoDiv.innerHTML = `<div style='color:#b71c1c;font-weight:bold;'>${data.mensagem || data.erro || "Erro desconhecido"}</div>${data.erro ? `<div style='color:#888;font-size:0.9em;'>${data.erro}</div>` : ''}`;
       }
     }
 

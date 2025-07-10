@@ -3,6 +3,7 @@ from flask_cors import CORS
 from produtos_nota import produtos_bp
 from produto import produto_bp
 from notas import notas_bp
+from conversao import conversao_bp
 
 app = Flask(__name__)
 CORS(app)
@@ -10,6 +11,7 @@ CORS(app)
 app.register_blueprint(produtos_bp)
 app.register_blueprint(produto_bp)
 app.register_blueprint(notas_bp)
+app.register_blueprint(conversao_bp)
 
 # Rotas para servir a interface web
 @app.route('/')

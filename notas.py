@@ -52,4 +52,4 @@ def listar_notas():
 
         return jsonify(notas)
     except Exception as e:
-        return jsonify({"erro": str(e)}), 500
+        return jsonify({"success": False, "mensagem": "Erro interno no servidor.", "erro": str(e)}), 500
