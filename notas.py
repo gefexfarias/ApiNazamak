@@ -52,4 +52,4 @@ def listar_notas():
 
         return jsonify(notas)
     except Exception as e:
-        return jsonify({"success": False, "mensagem": "Erro interno no servidor.", "erro": str(e)}), 500
+        return jsonify({"success": False, "message": "Ocorreu um erro ao consultar as notas fiscais. Tente novamente ou contate o suporte.", "details": str(e)}), 500

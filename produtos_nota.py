@@ -27,6 +27,6 @@ def produtos_da_nota(numero_nota):
         if produtos:
             return jsonify(produtos)
         else:
-            return jsonify({"success": False, "mensagem": "Nenhum produto encontrado para essa nota de entrada."}), 404
+            return jsonify({"success": False, "message": "Nenhum produto encontrado para essa nota de entrada."}), 404
     except Exception as e:
-        return jsonify({"success": False, "mensagem": "Erro interno no servidor.", "erro": str(e)}), 500
+        return jsonify({"success": False, "message": "Ocorreu um erro ao consultar os produtos da nota. Tente novamente ou contate o suporte.", "details": str(e)}), 500

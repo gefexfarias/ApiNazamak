@@ -85,6 +85,6 @@ def saldo_produto(codigo_produto):
                     conn.close()
                     return jsonify(produto_dict)
             conn.close()
-            return jsonify({"success": False, "mensagem": "Produto não encontrado e sem conversão cadastrada."}), 404
+            return jsonify({"success": False, "message": "Produto não encontrado e sem conversão cadastrada."}), 404
     except Exception as e:
-        return jsonify({"success": False, "mensagem": "Erro interno no servidor.", "erro": str(e)}), 500
+        return jsonify({"success": False, "message": "Ocorreu um erro ao consultar o produto. Tente novamente ou contate o suporte.", "details": str(e)}), 500
