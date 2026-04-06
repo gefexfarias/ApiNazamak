@@ -281,6 +281,36 @@
       h2 { font-size: 1.05rem; }
       table { font-size: 0.89rem; }
     }
+
+    /* Estilos para Impressão de Etiquetas */
+    @media print {
+      @page { margin: 0; size: A4; }
+      body * { display: none !important; }
+      #print-section { display: grid !important; }
+      #print-section, #print-section * { visibility: visible; display: grid; }
+      #print-section {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 210mm;
+        grid-template-columns: repeat(4, 52.5mm);
+        grid-auto-rows: 19.8mm;
+        background: white;
+      }
+      .etiqueta {
+        padding: 1.5mm;
+        box-sizing: border-box;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        font-family: Arial, sans-serif;
+        border: 0.01mm solid transparent; /* para evitar colapso mas não imprimir borda forte */
+      }
+      .etiqueta-codigo { font-weight: bold; font-size: 10pt; margin-bottom: 1px; }
+      .etiqueta-desc { font-size: 8pt; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+      .etiqueta-loc { font-size: 8pt; font-weight: bold; margin-top: 1px; }
+    }
   </style>
 </head>
 <body>
@@ -291,6 +321,7 @@
     <a href="#" onclick="mostrarFormulario('produtos-nota'); return false;"><span class="material-icons">inventory_2</span> Produtos da Nota</a>
   </div>
   <div class="overlay" id="menuOverlay" onclick="fecharMenu()"></div>
+  <div id="print-section" style="display: none;"></div>
 
   <div class="container">
     <div class="card" id="produto">
@@ -488,6 +519,11 @@
           <b>Valor Total:</b> <span style='color:#1976d2;'>R$ ${Number(nota.ValorTotal).toLocaleString('pt-BR', {minimumFractionDigits:2})}</span> &nbsp; 
           <b>Qtde. Itens:</b> ${nota.QuantidadeItens}
           <span style='display:block;'><b>Fornecedor:</b> ${nota.Fornecedor}</span>
+          <div style="margin-top: 0.5rem; text-align: right;">
+            <button onclick="prepararImpressao()" style="background:#2e7d32; padding: 0.4rem 1rem; font-size:0.9rem;">
+              <span class="material-icons">print</span> Imprimir Etiquetas
+            </button>
+          </div>
         </div>
       `;
     }
@@ -497,12 +533,17 @@
         return '<span>Nenhum produto encontrado para esta nota.</span>';
       }
       let html = `<div style='margin-bottom:0.7rem;'><b>Itens encontrados: ${data.length}</b></div>`;
-      html += `<div style='overflow-x:auto;'><table class='tabela-auto'>`;
-      html += `<thead><tr><th>Código</th><th>Descrição</th><th class='qtd'>Quantidade</th><th class='valor'>Valor Unitário</th></tr></thead><tbody>`;
-      html += data.map(prod => `
-        <tr>
+      html += `<div style='overflow-x:auto;'><table class='tabela-auto' id='tabelaProdutosNota'>`;
+      html += `<thead><tr>
+                <th style="width:30px; text-align:center;"><input type="checkbox" id="checkAllItems" checked onclick="toggleAllCheckboxes(this)"></th>
+                <th>Código</th><th>Descrição</th><th>Locação</th><th class='qtd'>Qtd</th><th class='valor'>Unitário</th>
+              </tr></thead><tbody>`;
+      html += data.map((prod, idx) => `
+        <tr data-prod='${JSON.stringify(prod).replace(/'/g, "&apos;")}'>
+          <td style="text-align:center;"><input type="checkbox" class="item-check" checked></td>
           <td>${prod.CodigoProduto}</td>
           <td>${prod.Descricao}</td>
+          <td>${prod.Locacao || '-'}</td>
           <td class='qtd'>${prod.Quantidade}</td>
           <td class='valor'>R$ ${Number(prod.ValorUnitario).toLocaleString('pt-BR', {minimumFractionDigits:2})}</td>
         </tr>
@@ -527,6 +568,46 @@
       // Mostra o card selecionado
       document.getElementById(formId).classList.add('active');
       fecharMenu();
+    }
+
+    function toggleAllCheckboxes(source) {
+      const checkboxes = document.querySelectorAll('.item-check');
+      checkboxes.forEach(cb => cb.checked = source.checked);
+    }
+
+    function prepararImpressao() {
+      const rows = document.querySelectorAll('#tabelaProdutosNota tbody tr');
+      const container = document.getElementById('print-section');
+      container.innerHTML = '';
+      
+      let etiquetasGeradas = 0;
+
+      rows.forEach(row => {
+        const checkbox = row.querySelector('.item-check');
+        if (checkbox && checkbox.checked) {
+          const prod = JSON.parse(row.getAttribute('data-prod'));
+          const qtd = parseInt(prod.Quantidade) || 0;
+          
+          for (let i = 0; i < qtd; i++) {
+            const etiqueta = document.createElement('div');
+            etiqueta.className = 'etiqueta';
+            etiqueta.innerHTML = `
+              <div class="etiqueta-codigo">${prod.CodigoProduto}</div>
+              <div class="etiqueta-desc">${prod.Descricao}</div>
+              <div class="etiqueta-loc">${prod.Locacao || ''}</div>
+            `;
+            container.appendChild(etiqueta);
+            etiquetasGeradas++;
+          }
+        }
+      });
+
+      if (etiquetasGeradas === 0) {
+        alert("Nenhum item selecionado para impressão.");
+        return;
+      }
+
+      window.print();
     }
   </script>
 </body>

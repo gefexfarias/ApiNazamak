@@ -13,9 +13,11 @@ def produtos_da_nota(numero_nota):
                 m.CODIGO AS CodigoProduto,
                 m.DESCRICAO AS Descricao,
                 m.QTDE AS Quantidade,
-                IIF(m.QTDE > 0, m.VLR_LIQUI / m.QTDE, 0) AS ValorUnitario
-            FROM [Movimentacao dos itens] AS m
-            INNER JOIN [Notas fiscais] AS n ON m.[CHAVE NOTA FISCAL] = n.[CHAVE NOTA FISCAL]
+                IIF(m.QTDE > 0, m.VLR_LIQUI / m.QTDE, 0) AS ValorUnitario,
+                p.LOCACAO AS Locacao
+            FROM ([Movimentacao dos itens] AS m
+            INNER JOIN [Notas fiscais] AS n ON m.[CHAVE NOTA FISCAL] = n.[CHAVE NOTA FISCAL])
+            LEFT JOIN [Tabela de Pecas] AS p ON m.CODIGO = p.CODIGO
             WHERE n.[NOTA_FISCA] = ? AND n.ENT_OU_SAI IN ('E','N','Y','Z')
             ORDER BY m.CODIGO
         """
