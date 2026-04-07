@@ -1,0 +1,28 @@
+
+# Dependências do Dashboard (React)
+nazamak-web-dash-57/node_modules/
+nazamak-web-dash-57/dist/
+nazamak-web-dash-57/.next/
+nazamak-web-dash-57/.env*
+
+# Python / Flask
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.env
+.venv/
+env/
+venv/
+ENV/
+
+# Logs e arquivos temporários
+*.log
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Banco de dados (não costuma ser boa prática commitar o .accdb em produção, mas vou deixar aqui comentado)
+# NAZAMAK.accdb
