@@ -1,65 +1,68 @@
-# Descrição do Projeto: ApiNazamak
+# Projeto: Ecossistema Nazamak (API + Dashboard)
 
-O **ApiNazamak** é um sistema de integração e consulta de dados desenvolvido para servir como uma ponte (API) entre um banco de dados legado em Microsoft Access e interfaces modernas (Web, Mobile, BI).
+O sistema **Nazamak** é uma solução moderna de integração que serve como ponte entre um banco de dados legado em Microsoft Access e interfaces de alta performance. Ele oferece gestão de estoque, consulta de notas fiscais e um sofisticado sistema de impressão de etiquetas térmicas/adesivas.
 
 ## 🛠 Tecnologias Utilizadas
 
-- **Linguagem:** Python 3.x
-- **Framework Web:** Flask
-- **Banco de Dados:** Microsoft Access (`NAZAMAK.accdb`)
-- **Conectividade:** `pyodbc` (utilizando o driver ODBC do Access)
-- **Frontend de Teste:** HTML5, CSS3 e JavaScript (Vanilla)
+### Backend (API)
+- **Linguagem:** Python 3.11+ (Flask)
+- **Banco de Dados:** Microsoft Access (`NAZAMAK.accdb`) via `pyodbc`.
+- **Arquitetura:** Baseada em Blueprints para separação de domínios (Produtos, Notas, Conversões).
+
+### Frontend (Dashboard Moderno)
+- **Framework:** React + Vite (Typescript)
+- **Estilização:** Tailwind CSS (Modern UI/UX)
+- **Ícones:** Lucide React
+- **Gerenciamento de Estado:** React Query & Local Hooks
 
 ---
 
 ## 🚀 Funcionalidades Principais
 
-### 1. Consulta de Produtos e Estoque
-O sistema permite consultar informações detalhadas de um produto através do seu código principal ou de um código de conversão (código de barras/alternativo).
-- **Cálculo de Saldo Dinâmico:** O saldo não é apenas um campo estático; o sistema percorre a tabela de movimentações, somando entradas e subtraindo saídas para fornecer o estoque real no momento da consulta.
-- **Vínculo de Unidades:** Identifica as unidades de conversão cadastradas para cada item.
+### 1. Busca Inteligente de Produtos
+O sistema possui um motor de busca que unifica códigos principais e referências cruzadas (conversões).
+- **Resolução Automática:** Ao pesquisar por um código de barras ou referência alternativa, o sistema identifica e exibe os dados do **Produto Principal** automaticamente.
+- **Cálculo de Saldo Real:** O estoque é calculado em tempo real percorrendo todo o histórico de movimentações (Entradas vs Saídas).
 
-### 2. Cadastro e Gestão de Conversões
-Além da consulta, o sistema permite o **registro de novos códigos de conversão** para produtos existentes.
-- **Validação de Integridade:** Garante que a conversão seja vinculada a um produto válido no cadastro master.
-- **Tratamento de Duplicidade:** Evita cadastros redundantes para o mesmo par de códigos.
+### 2. Impressão de Etiquetas High-Precision
+Um módulo de impressão unificado (`printLabels.ts`) configurado para papel **Carta (Letter - 217x280mm)**.
+- **Layout de Grade:** 4 colunas x 15 linhas (60 etiquetas por folha).
+- **Posição Inicial (Offset):** O usuário pode escolher em qual Linha e Coluna a impressão deve começar, permitindo o reaproveitamento de folhas adesivas já iniciadas.
+- **Réguas de Auxílio:** Números indicadores (1-15 e 1-4) impressos nas margens para facilitar a identificação da posição inicial em folhas novas.
 
-### 3. Gestão de Notas Fiscais de Entrada
-API dedicada para listar e filtrar documentos fiscais de entrada.
-- **Filtros Flexíveis:** Busca por intervalo de datas ou número específico da nota.
-- **Relacionamento com Fornecedores:** Integração automática com o cadastro de fornecedores para exibir nomes em vez de apenas IDs.
+### 3. Módulos de Impressão
+- **Por Nota Fiscal:** Seleção rápida de itens de uma NF de entrada com quantidades automáticas.
+- **Impressão Avulsa (Manual):** Interface para "bipagem" manual de produtos e quantidades, permitindo montar uma folha de etiquetas customizada.
 
-### 4. Detalhamento de Itens e Impressão de Etiquetas
-Sistema integrado para conferência de itens e geração de etiquetas de estoque.
-- **Seleção de Itens:** Permite marcar quais produtos da nota devem ter etiquetas geradas.
-- **Impressão em Grade (4x15):** Layout otimizado para papel adesivo A4 em 4 colunas por 15 linhas.
-- **Quantidade Dinâmica:** Gera automaticamente o número de etiquetas correspondente à quantidade de cada item na nota.
-- **Dados Impressos:** Código do produto, Descrição e Locação (setor/prateleira).
+### 4. Gestão de Referências Cruzadas
+Interface para vincular novos códigos de barras ou códigos de fornecedores a produtos existentes no cadastro master.
 
 ---
 
-## 📂 Estrutura de Arquivos
+## 📂 Estrutura de Arquivos Relevante
 
-- `app.py`: Servidor Flask e registro de rotas (Blueprints).
-- `database.py`: Gerencia a conexão com o arquivo `.accdb`.
-- `produto.py`: Lógica de negócio para saldos e informações de produtos.
-- `notas.py`: Lógica para listagem de notas fiscais.
-- `produtos_nota.py`: Lógica para detalhamento de itens de uma nota.
-- `conversao.py`: Gerenciamento de códigos e unidades alternativas.
-- `testar_produto.html`: Interface visual para testes rápidos de todos os endpoints.
+### Raiz (Backend)
+- `app.py`: Ponto de entrada da API.
+- `produto.py`: Motor de busca e saldo de produtos.
+- `conversao.py`: Lógica de gerenciamento de referências cruzadas.
+
+### `nazamak-web-dash-57` (Frontend)
+- `src/pages/ManualLabelPrint.tsx`: Interface de impressão manual.
+- `src/pages/ProductQuery.tsx`: Consulta moderna de estoque.
+- `src/utils/printLabels.ts`: **Motor mestre de impressão**. Contém toda a lógica de CSS `@media print`, margens e paginação.
+- `src/services/api.ts`: Camada de comunicação com o backend Python.
 
 ---
 
-## 🔗 Endpoints da API
+## 🔗 Endpoints Principais (API)
 
 | Rota | Método | Descrição |
 | :--- | :--- | :--- |
-| `/api/produto/<codigo>` | `GET` | Retorna descrição, saldo e conversões de um produto. |
-| `/api/notas-entrada` | `GET` | Lista notas de entrada (parâmetros: `inicio`, `fim`, `numero`). |
-| `/api/produtos-da-nota/<nro>` | `GET` | Lista os itens/produtos de uma nota específica. |
-| `/api/conversoes/<codigo>` | `GET` | Retorna as unidades de conversão de um produto. |
+| `/api/produto/<codigo>` | `GET` | Retorna descrição, saldo, locação e conversões. |
+| `/api/produtos-da-nota/<nro>` | `GET` | Detalha itens de uma NF para conferência/etiquetagem. |
+| `/api/cadastrar-conversao` | `POST` | Vincula uma nova referência cruzada a um código principal. |
 
 ---
 
 ## 🎯 Objetivo de Negócio
-Este projeto visa modernizar o acesso aos dados do sistema **Nazamak**, permitindo que outras aplicações consumam informações de estoque e fiscais de forma padronizada via JSON, sem a necessidade de interagir diretamente com o banco de dados Access.
+Garantir agilidade na identificação de peças e precisão no controle de estoque da **Nazamak**, transformando dados legados em informações acionáveis em tempo real através de uma interface web premium e funcional.
