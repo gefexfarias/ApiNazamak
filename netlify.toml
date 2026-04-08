@@ -1,0 +1,13 @@
+[build]
+  # Onde o comando de build deve ser executado
+  base = "nazamak-web-dash-57"
+  
+  # Comando para gerar os arquivos finais
+  command = "npm run build"
+  
+  # Pasta onde os arquivos prontos (dist) estarão dentro de 'nazamak-web-dash-57'
+  publish = "dist"
+
+[build.environment]
+  # Define a versão do Node para evitar erros de compatibilidade
+  NODE_VERSION = "20"
