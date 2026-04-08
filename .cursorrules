@@ -1,0 +1,5 @@
+# Regras do Projeto ApiNazamak
+
+- **Idioma Padrão:** Todas as comunicações, arquivos de tarefas (.md), documentações e especialmente **MENSAGENS DE COMMIT** (ao usar o botão 'Generate' ou comandos de IA) devem ser obrigatoriamente em **Português do Brasil (pt-br)**.
+- **Formato de Commit:** Utilize o padrão Conventional Commits (ex: feat:, fix:, docs:, refactor:) mas com a descrição em português.
+- **Contexto de Negócio:** Este é um sistema para a Nazamak, focado em estoque e etiquetas. Mantenha os termos técnicos como "Locação", "Referência Cruzada" e "Saldo" consistentes.
