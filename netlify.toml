@@ -11,3 +11,8 @@
 [build.environment]
   # Define a versão do Node para evitar erros de compatibilidade
   NODE_VERSION = "20"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
