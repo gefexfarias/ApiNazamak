@@ -32,26 +32,13 @@ export const printLabels = (items: LabelItem[], startRow: number, startCol: numb
   // 2. ADICIONAR ETIQUETAS REAIS
   items.forEach((item) => {
     const count = Math.max(0, Math.floor(item.Quantidade));
-    
-    // Calcular tamanho dinâmico da fonte para o código
-    const codeLength = item.CodigoProduto.length;
-    let codeFontSize = 13; // Padrão
-    if (codeLength <= 9) codeFontSize = 20;
-    else if (codeLength <= 12) codeFontSize = 16;
-    else if (codeLength <= 15) codeFontSize = 13;
-    else if (codeLength <= 20) codeFontSize = 10;
-    else codeFontSize = 8;
-
     for (let i = 0; i < count; i++) {
       const label = document.createElement('div');
       label.className = 'etiqueta';
       label.innerHTML = `
-        <div class="etiqueta-codigo" style="font-size: ${codeFontSize}pt">${item.CodigoProduto}</div>
+        <div class="etiqueta-codigo">${item.CodigoProduto}</div>
         <div class="etiqueta-desc">${item.Descricao}</div>
-        <div class="etiqueta-footer">
-          <div class="etiqueta-loc">${item.Locacao || ''}</div>
-          <div class="etiqueta-brand">NAZAMAK</div>
-        </div>
+        <div class="etiqueta-loc">${item.Locacao || ''}</div>
       `;
       allLabels.push(label);
     }
@@ -87,7 +74,7 @@ export const printLabels = (items: LabelItem[], startRow: number, startCol: numb
         const colNum = document.createElement('div');
         colNum.className = 'col-number';
         colNum.innerText = c.toString();
-        colNum.style.left = `${15 + (c - 1) * (44.45 + 2)}mm`;
+        colNum.style.left = `${15 + (c - 1) * (44.45 + 3)}mm`;
         page.appendChild(colNum);
       }
     }

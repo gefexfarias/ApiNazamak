@@ -172,11 +172,6 @@ const NoteProductsList = ({ noteNumber, products, onProductClick }: NoteProducts
                       <div className="font-medium text-nazamak-black truncate" title={product.Descricao}>
                         {product.Descricao}
                       </div>
-                      {product.DescricaoNota && product.DescricaoNota.toLowerCase() !== product.Descricao.toLowerCase() && (
-                        <div className="text-[10px] text-muted-foreground/60 italic truncate" title={`Na Nota: ${product.DescricaoNota}`}>
-                          Nota: {product.DescricaoNota}
-                        </div>
-                      )}
                     </div>
                     <div>
                       <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Qtd / Locação</div>

@@ -20,7 +20,6 @@ export interface NotaFiscal {
 export interface ProdutoNota {
   CodigoProduto: string;
   Descricao: string;
-  DescricaoNota?: string;
   Quantidade: number;
   ValorUnitario: number;
   Locacao?: string;

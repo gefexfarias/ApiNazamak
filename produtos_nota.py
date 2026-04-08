@@ -11,8 +11,7 @@ def produtos_da_nota(numero_nota):
         query = """
             SELECT 
                 m.CODIGO AS CodigoProduto,
-                IIF(p.PRODUTO IS NULL, m.DESCRICAO, p.PRODUTO) AS Descricao,
-                m.DESCRICAO AS DescricaoNota,
+                m.DESCRICAO AS Descricao,
                 m.QTDE AS Quantidade,
                 IIF(m.QTDE > 0, m.VLR_LIQUI / m.QTDE, 0) AS ValorUnitario,
                 p.LOCACAO AS Locacao

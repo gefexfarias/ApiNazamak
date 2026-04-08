@@ -141,7 +141,7 @@
 @media print {
   @page { 
     margin: 0; 
-    size: 217mm 280mm; 
+    size: A4; 
   }
   
   body > *:not(#print-container) {
@@ -153,7 +153,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    width: 217mm;
+    width: 210mm;
     background: white !important;
     z-index: 9999;
   }
@@ -161,15 +161,15 @@
   .print-page {
     display: grid !important;
     position: relative;
-    width: 217mm;
-    height: 280mm;
+    width: 210mm;
+    height: 297mm;
     padding-top: 13mm;
     padding-bottom: 13mm;
     padding-left: 15mm;
-    padding-right: 15mm;
+    padding-right: 8.2mm;
     grid-template-columns: repeat(4, 44.45mm);
     grid-template-rows: repeat(15, 16.93mm);
-    column-gap: 2mm; /* Reduzido de 5mm para 2mm */
+    column-gap: 3mm; 
     row-gap: 0;
     page-break-after: always;
     break-after: page;
@@ -232,25 +232,10 @@
     margin-bottom: 2pt;
   }
 
-  .etiqueta-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    width: 100%;
-    margin-top: auto;
-  }
-
   .etiqueta-loc { 
     font-size: 7.5pt; 
     font-weight: bold; 
-    line-height: 1;
-  }
-
-  .etiqueta-brand {
-    font-size: 6pt;
-    font-weight: bold;
-    color: #444;
-    letter-spacing: 0.5pt;
+    margin-top: 0px; 
     line-height: 1;
   }
 }

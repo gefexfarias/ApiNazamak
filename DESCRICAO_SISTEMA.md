@@ -25,10 +25,15 @@ O sistema possui um motor de busca que unifica códigos principais e referência
 - **Cálculo de Saldo Real:** O estoque é calculado em tempo real percorrendo todo o histórico de movimentações (Entradas vs Saídas).
 
 ### 2. Impressão de Etiquetas High-Precision
-Um módulo de impressão unificado (`printLabels.ts`) configurado para papel **Carta (Letter - 217x280mm)**.
+Um módulo de impressão unificado (`printLabels.ts`) configurado para o cenário de "Manobra A4" (Papel físico Carta impresso com driver A4).
 - **Layout de Grade:** 4 colunas x 15 linhas (60 etiquetas por folha).
-- **Posição Inicial (Offset):** O usuário pode escolher em qual Linha e Coluna a impressão deve começar, permitindo o reaproveitamento de folhas adesivas já iniciadas.
-- **Réguas de Auxílio:** Números indicadores (1-15 e 1-4) impressos nas margens para facilitar a identificação da posição inicial em folhas novas.
+- **Gabarito de Calibração (Final):**
+  - **Margem Esquerda:** 15mm
+  - **Margem Superior:** 13mm
+  - **Espaçamento entre Colunas (Gap):** 3mm
+  - **Configuração no Navegador:** Tamanho A4 e Escala 100% (Obrigatório).
+- **Posição Inicial (Offset):** O usuário pode escolher em qual Linha e Coluna a impressão deve começar.
+- **Réguas de Auxílio:** Números indicadores (1-15 e 1-4) impressos nas margens.
 
 ### 3. Módulos de Impressão
 - **Por Nota Fiscal:** Seleção rápida de itens de uma NF de entrada com quantidades automáticas.
