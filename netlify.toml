@@ -1,0 +1,18 @@
+# Configuração de Build para o Dashboard Nazamak unificado
+
+[build]
+  # Diretório onde o frontend reside (subpasta)
+  base = "nazamak-web-dash-57"
+  
+  # Comando de compilação (dentro da subpasta)
+  command = "npm run build"
+  
+  # Diretório de publicação (relativo à base)
+  publish = "dist"
+
+# Redirecionamento para suportar Single Page Application (React Router)
+# Isso evita o erro 404 ao atualizar a página em rotas internas
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
