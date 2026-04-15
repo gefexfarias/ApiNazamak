@@ -51,8 +51,17 @@ O sistema imprime em papel físico **Carta (Letter, 8,5" × 11" = 215,9 × 279,4
 - Escala: **100%** (sem ajuste automático)
 - Margens: **Nenhuma / Zeradas**
 
-#### Layout Atual (Gabarito de Calibração)
+#### Layouts Cadastrados
 
+| ID | Nome | Etiquetas/Folha | Etiqueta (mm) | Papel |
+|---|---|---|---|---|
+| `carta_4x15` | Carta 4×15 (Padrão) | 60 | 44,45 × 16,93 | Carta |
+| `carta_4x20_8020` | Carta 4×20 — Pimaco 8020-1 | 80 | 44,45 × 12,7 | Carta |
+
+Para adicionar um novo layout: editar apenas `src/utils/labelLayouts.ts`.
+
+#### Seletor Persistente de Layout
+O último layout selecionado pelo usuário é memorizado via `localStorage` (chave: `nazamak_layout_etiqueta`) e restaurado automaticamente na próxima sessão, mesmo após fechar o navegador. Implementado no hook `src/hooks/useLabelLayout.ts`.
 
 ### 3. Módulos de Impressão
 - **Por Nota Fiscal:** Seleção rápida de itens de uma NF de entrada com quantidades automáticas.
@@ -71,9 +80,12 @@ Interface para vincular novos códigos de barras ou códigos de fornecedores a p
 - `conversao.py`: Lógica de gerenciamento de referências cruzadas.
 
 ### `nazamak-web-dash-57` (Frontend)
-- `src/pages/ManualLabelPrint.tsx`: Interface de impressão manual.
+- `src/pages/ManualLabelPrint.tsx`: Interface de impressão avulsa (bipagem manual de produtos).
 - `src/pages/ProductQuery.tsx`: Consulta moderna de estoque.
-- `src/utils/printLabels.ts`: **Motor mestre de impressão**. Contém toda a lógica de CSS `@media print`, margens e paginação.
+- `src/components/notes/NoteProductsList.tsx`: Lista de produtos de uma NF com seleção e impressão de etiquetas.
+- `src/utils/labelLayouts.ts`: **Catálogo de layouts de etiquetas.** Único arquivo a editar para adicionar novos modelos de folha. Contém a regra permanente "Manobra A4".
+- `src/utils/printLabels.ts`: **Motor de impressão.** Gera o HTML e CSS de `@media print` dinamicamente a partir do layout selecionado.
+- `src/hooks/useLabelLayout.ts`: Hook que persiste o último layout selecionado no `localStorage`.
 - `src/services/api.ts`: Camada de comunicação com o backend Python.
 
 ---
