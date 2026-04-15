@@ -1,12 +1,14 @@
 
 import { useState, useRef, useEffect } from "react";
-import { Search, Package, Printer, Trash2, Plus, Loader2 } from "lucide-react";
+import { Search, Package, Printer, Trash2, Plus, Loader2, LayoutGrid } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { apiService, Product } from "@/services/api";
+import { apiService } from "@/services/api";
 import { printLabels, LabelItem } from "@/utils/printLabels";
+import { LABEL_LAYOUTS, LabelLayoutId } from "@/utils/labelLayouts";
+import { useLabelLayout } from "@/hooks/useLabelLayout";
 
 const ManualLabelPrint = () => {
   const [productCode, setProductCode] = useState("");
@@ -15,6 +17,7 @@ const ManualLabelPrint = () => {
   const [items, setItems] = useState<LabelItem[]>([]);
   const [startRow, setStartRow] = useState(1);
   const [startCol, setStartCol] = useState(1);
+  const { layoutId, layout, setLayoutId } = useLabelLayout();
 
   const codeInputRef = useRef<HTMLInputElement>(null);
   const qtyInputRef = useRef<HTMLInputElement>(null);
@@ -75,7 +78,7 @@ const ManualLabelPrint = () => {
       return;
     }
 
-    const success = printLabels(items, startRow, startCol);
+    const success = printLabels(items, startRow, startCol, layout);
     if (!success) {
       toast.error("Erro ao gerar impressão.");
     }
@@ -106,6 +109,36 @@ const ManualLabelPrint = () => {
           Monte sua folha de etiquetas digitando o código e a quantidade para cada produto
         </p>
       </div>
+
+      {/* Seletor de Layout */}
+      <Card className="border-2 border-nazamak-yellow/30 bg-nazamak-yellow/5">
+        <CardContent className="py-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            <div className="flex items-center gap-2 text-nazamak-black font-semibold text-sm whitespace-nowrap">
+              <LayoutGrid className="h-4 w-4 text-nazamak-yellow" />
+              Modelo de Folha:
+            </div>
+            <select
+              value={layoutId}
+              onChange={(e) => {
+                setLayoutId(e.target.value as LabelLayoutId);
+                setStartRow(1);
+                setStartCol(1);
+              }}
+              className="flex-1 h-10 rounded-lg border-2 border-nazamak-yellow/40 bg-white px-3 text-sm font-medium text-nazamak-black focus:outline-none focus:border-nazamak-yellow cursor-pointer"
+            >
+              {(Object.entries(LABEL_LAYOUTS) as [LabelLayoutId, typeof layout][]).map(([id, l]) => (
+                <option key={id} value={id}>{l.nome} — {l.descricao}</option>
+              ))}
+            </select>
+            {layout.observacoes && (
+              <p className="text-[11px] text-muted-foreground sm:max-w-xs">
+                ⚙️ {layout.observacoes}
+              </p>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Form Column */}
@@ -171,24 +204,24 @@ const ManualLabelPrint = () => {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-[11px] font-bold text-muted-foreground uppercase">Linha Inicial (1-15)</label>
+                  <label className="text-[11px] font-bold text-muted-foreground uppercase">Linha Inicial (1-{layout.numLinhas})</label>
                   <Input 
                     type="number" 
                     min="1" 
-                    max="15" 
+                    max={layout.numLinhas} 
                     value={startRow}
-                    onChange={(e) => setStartRow(parseInt(e.target.value) || 1)}
+                    onChange={(e) => setStartRow(Math.max(1, Math.min(layout.numLinhas, parseInt(e.target.value) || 1)))}
                     className="h-10 border-2 focus:border-nazamak-yellow"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[11px] font-bold text-muted-foreground uppercase">Coluna Inicial (1-4)</label>
+                  <label className="text-[11px] font-bold text-muted-foreground uppercase">Coluna Inicial (1-{layout.numColunas})</label>
                   <Input 
                     type="number" 
                     min="1" 
-                    max="4" 
+                    max={layout.numColunas} 
                     value={startCol}
-                    onChange={(e) => setStartCol(parseInt(e.target.value) || 1)}
+                    onChange={(e) => setStartCol(Math.max(1, Math.min(layout.numColunas, parseInt(e.target.value) || 1)))}
                     className="h-10 border-2 focus:border-nazamak-yellow"
                   />
                 </div>

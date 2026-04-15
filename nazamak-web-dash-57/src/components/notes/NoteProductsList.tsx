@@ -1,6 +1,6 @@
 
 import { useState, useMemo } from "react";
-import { Package, Loader2, Printer, CheckCircle2, Circle } from "lucide-react";
+import { Package, Loader2, Printer, CheckCircle2, Circle, LayoutGrid } from "lucide-react";
 import { ProdutoNota } from "@/services/api";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -13,11 +13,14 @@ interface NoteProductsListProps {
 }
 
 import { printLabels, LabelItem } from "@/utils/printLabels";
+import { LABEL_LAYOUTS, LabelLayoutId } from "@/utils/labelLayouts";
+import { useLabelLayout } from "@/hooks/useLabelLayout";
 
 const NoteProductsList = ({ noteNumber, products, onProductClick }: NoteProductsListProps) => {
   const [selectedIndices, setSelectedIndices] = useState<Set<number>>(new Set());
   const [startRow, setStartRow] = useState(1);
   const [startCol, setStartCol] = useState(1);
+  const { layoutId, layout, setLayoutId } = useLabelLayout();
 
   // Inicializar todos como selecionados quando os produtos carregarem
   useMemo(() => {
@@ -57,7 +60,6 @@ const NoteProductsList = ({ noteNumber, products, onProductClick }: NoteProducts
   const handlePrint = () => {
     if (!products) return;
     
-    // Mapear produtos selecionados para o formato do utilitário
     const itemsToPrint: LabelItem[] = [];
     products.forEach((product, index) => {
       if (selectedIndices.has(index)) {
@@ -70,7 +72,7 @@ const NoteProductsList = ({ noteNumber, products, onProductClick }: NoteProducts
       }
     });
 
-    const success = printLabels(itemsToPrint, startRow, startCol);
+    const success = printLabels(itemsToPrint, startRow, startCol, layout);
     if (!success) {
       toast.error("Nenhum item selecionado para impressão.");
     }
@@ -89,6 +91,26 @@ const NoteProductsList = ({ noteNumber, products, onProductClick }: NoteProducts
         
         {products && products.length > 0 && (
           <div className="flex flex-wrap items-center gap-4">
+
+            {/* Seletor de Layout */}
+            <div className="flex items-center gap-2 bg-white p-2 rounded-lg border border-nazamak-gray-medium shadow-sm">
+              <LayoutGrid className="h-4 w-4 text-nazamak-yellow shrink-0" />
+              <select
+                value={layoutId}
+                onChange={(e) => {
+                  setLayoutId(e.target.value as LabelLayoutId);
+                  setStartRow(1);
+                  setStartCol(1);
+                }}
+                className="h-8 rounded border border-nazamak-yellow/40 bg-white px-2 text-xs font-medium text-nazamak-black focus:outline-none focus:border-nazamak-yellow cursor-pointer"
+                title={layout.observacoes}
+              >
+                {(Object.entries(LABEL_LAYOUTS) as [LabelLayoutId, typeof layout][]).map(([id, l]) => (
+                  <option key={id} value={id}>{l.nome}</option>
+                ))}
+              </select>
+            </div>
+
             {/* Posição Inicial UI */}
             <div className="flex items-center gap-3 bg-white p-2 rounded-lg border border-nazamak-gray-medium shadow-sm">
                 <div className="space-y-0.5">
@@ -96,9 +118,9 @@ const NoteProductsList = ({ noteNumber, products, onProductClick }: NoteProducts
                     <input 
                         type="number" 
                         min="1" 
-                        max="15" 
+                        max={layout.numLinhas} 
                         value={startRow}
-                        onChange={(e) => setStartRow(Math.max(1, Math.min(15, parseInt(e.target.value) || 1)))}
+                        onChange={(e) => setStartRow(Math.max(1, Math.min(layout.numLinhas, parseInt(e.target.value) || 1)))}
                         className="w-12 h-8 border rounded px-2 text-sm focus:ring-1 focus:ring-nazamak-yellow outline-none"
                     />
                 </div>
@@ -107,9 +129,9 @@ const NoteProductsList = ({ noteNumber, products, onProductClick }: NoteProducts
                     <input 
                         type="number" 
                         min="1" 
-                        max="4" 
+                        max={layout.numColunas} 
                         value={startCol}
-                        onChange={(e) => setStartCol(Math.max(1, Math.min(4, parseInt(e.target.value) || 1)))}
+                        onChange={(e) => setStartCol(Math.max(1, Math.min(layout.numColunas, parseInt(e.target.value) || 1)))}
                         className="w-12 h-8 border rounded px-2 text-sm focus:ring-1 focus:ring-nazamak-yellow outline-none"
                     />
                 </div>

@@ -25,15 +25,34 @@ O sistema possui um motor de busca que unifica códigos principais e referência
 - **Cálculo de Saldo Real:** O estoque é calculado em tempo real percorrendo todo o histórico de movimentações (Entradas vs Saídas).
 
 ### 2. Impressão de Etiquetas High-Precision
-Um módulo de impressão unificado (`printLabels.ts`) configurado para o cenário de "Manobra A4" (Papel físico Carta impresso com driver A4).
-- **Layout de Grade:** 4 colunas x 15 linhas (60 etiquetas por folha).
-- **Gabarito de Calibração (Final):**
-  - **Margem Esquerda:** 15mm
-  - **Margem Superior:** 13mm
-  - **Espaçamento entre Colunas (Gap):** 3mm
-  - **Configuração no Navegador:** Tamanho A4 e Escala 100% (Obrigatório).
-- **Posição Inicial (Offset):** O usuário pode escolher em qual Linha e Coluna a impressão deve começar.
-- **Réguas de Auxílio:** Números indicadores (1-15 e 1-4) impressos nas margens.
+Um módulo de impressão unificado (`printLabels.ts`) com suporte a múltiplos modelos de folha configurados em `labelLayouts.ts`.
+
+#### 🖨️ Regra Permanente: "Manobra A4"
+
+> **Esta regra deve ser respeitada em TODOS os layouts, presentes e futuros, sem exceção.**
+
+O sistema imprime em papel físico **Carta (Letter, 8,5" × 11" = 215,9 × 279,4mm)**, mas o **driver da impressora e o CSS `@page` são sempre configurados como A4**.
+
+| | Configuração |
+|---|---|
+| **Driver da impressora** | A4 |
+| **CSS `@page { size: ... }`** | A4 |
+| **Papel físico na bandeja** | Carta (Letter) |
+| **Campo `tamanhoPagina` no layout** | `'A4'` — sempre |
+
+**Por que funciona:** o A4 (297mm) é mais alto que o Carta (279,4mm). O conteúdo das etiquetas é dimensionado para caber dentro da altura do Carta, e os ~17mm de diferença ficam como margem inferior extra — invisível na impressão.
+
+**O campo `paginaAltMm`** nos layouts controla apenas a altura da **grade HTML** (o div de impressão), não o driver:
+- Papel **Carta** → `paginaAltMm: 279.4`
+- Papel **A4 puro** → `paginaAltMm: 297`
+
+**Configuração obrigatória no navegador ao imprimir:**
+- Tamanho do papel: **A4**
+- Escala: **100%** (sem ajuste automático)
+- Margens: **Nenhuma / Zeradas**
+
+#### Layout Atual (Gabarito de Calibração)
+
 
 ### 3. Módulos de Impressão
 - **Por Nota Fiscal:** Seleção rápida de itens de uma NF de entrada com quantidades automáticas.
