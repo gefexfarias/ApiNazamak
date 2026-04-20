@@ -72,9 +72,24 @@ const NoteProductsList = ({ noteNumber, products, onProductClick }: NoteProducts
       }
     });
 
+    if (itemsToPrint.length === 0) {
+      toast.error("Nenhum item selecionado para impressão.");
+      return;
+    }
+
+    // Verificar itens sem locação
+    const itemsSemLoc = itemsToPrint.filter(it => !it.Locacao || it.Locacao.trim() === "");
+    if (itemsSemLoc.length > 0) {
+      const codigos = itemsSemLoc.map(it => it.CodigoProduto).join(", ");
+      const proceed = window.confirm(
+        `Atenção: Os seguintes produtos selecionados estão sem LOCAÇÃO definida:\n\n${codigos}\n\nDeseja imprimir mesmo assim?`
+      );
+      if (!proceed) return;
+    }
+
     const success = printLabels(itemsToPrint, startRow, startCol, layout);
     if (!success) {
-      toast.error("Nenhum item selecionado para impressão.");
+      toast.error("Erro ao gerar impressão.");
     }
   };
 

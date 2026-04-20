@@ -78,6 +78,16 @@ const ManualLabelPrint = () => {
       return;
     }
 
+    // Verificar itens sem locação
+    const itemsSemLoc = items.filter(it => !it.Locacao || it.Locacao.trim() === "");
+    if (itemsSemLoc.length > 0) {
+      const codigos = itemsSemLoc.map(it => it.CodigoProduto).join(", ");
+      const proceed = window.confirm(
+        `Atenção: Os seguintes produtos estão sem LOCAÇÃO definida:\n\n${codigos}\n\nDeseja imprimir mesmo assim?`
+      );
+      if (!proceed) return;
+    }
+
     const success = printLabels(items, startRow, startCol, layout);
     if (!success) {
       toast.error("Erro ao gerar impressão.");

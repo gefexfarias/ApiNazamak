@@ -100,12 +100,12 @@ export const printLabels = (
       }
 
       .etiqueta {
-        padding: 1mm 1.5mm;
+        padding: 1mm 2.5mm;
         box-sizing: border-box;
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         font-family: Arial, sans-serif;
         color: black !important;
         text-align: left;
@@ -114,9 +114,31 @@ export const printLabels = (
 
       .etiqueta-codigo {
         font-weight: bold;
-        font-size: ${layout.fonteCodPt}pt;
+        white-space: nowrap;
+        width: 100%;
+        text-align: center;
         margin-bottom: 2pt;
         line-height: 1;
+        overflow: hidden;
+      }
+
+      .etiqueta-corpo {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end; /* Alinha a locação com o fundo da descrição */
+        width: 100%;
+        gap: 2mm;
+        margin-top: auto;
+        min-height: 0;
+        overflow: hidden;
+      }
+
+      .etiqueta-desc-wrapper {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
       }
 
       .etiqueta-desc {
@@ -126,16 +148,21 @@ export const printLabels = (
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        max-width: 100%;
         line-height: 1.1;
-        margin-bottom: 2pt;
+        width: 100%;
       }
 
       .etiqueta-loc {
-        font-size: ${layout.fonteLocPt}pt;
+        font-size: ${Math.max(10, layout.fonteLocPt + 3)}pt; /* Aumentado conforme solicitado */
         font-weight: bold;
-        margin-top: 0px;
+        white-space: nowrap;
+        flex-shrink: 0;
+        text-align: right;
+        background: #eee;
+        padding: 1pt 3pt;
+        border-radius: 2pt;
         line-height: 1;
+        margin-bottom: 0.5pt; /* Alinha um pouco acima do limite extremo */
       }
     }
   `;
@@ -156,13 +183,32 @@ export const printLabels = (
   // Etiquetas reais
   items.forEach((item) => {
     const count = Math.max(0, Math.floor(item.Quantidade));
+    const loc = (item.Locacao || '').trim();
+    const cod = item.CodigoProduto.trim();
+    
+    // Cálculo de fonte dinâmica para o código (agora usando 100% da largura)
+    const paddingHorizontalMm = 5; // 2.5mm cada lado
+    const larguraDisponivelPt = (layout.etiqLargMm - paddingHorizontalMm) * 2.834;
+    
+    // Fator 0.85 para Arial Bold (seguro)
+    let fontSizeCod = larguraDisponivelPt / (cod.length * 0.85);
+    
+    // Limites de segurança (baseados na altura da etiqueta)
+    // Reservamos ~40% da altura para o código, deixando o resto (60%) para a descrição/locação
+    const maxHeightCodPt = (layout.etiqAltMm * 0.40) * 2.834;
+    fontSizeCod = Math.min(fontSizeCod, maxHeightCodPt);
+
     for (let i = 0; i < count; i++) {
       const label = document.createElement('div');
       label.className = 'etiqueta';
       label.innerHTML = `
-        <div class="etiqueta-codigo">${item.CodigoProduto}</div>
-        <div class="etiqueta-desc">${item.Descricao}</div>
-        <div class="etiqueta-loc">${item.Locacao || ''}</div>
+        <div class="etiqueta-codigo" style="font-size: ${fontSizeCod.toFixed(1)}pt">${cod}</div>
+        <div class="etiqueta-corpo">
+          <div class="etiqueta-desc-wrapper">
+            <div class="etiqueta-desc">${item.Descricao}</div>
+          </div>
+          ${loc ? `<div class="etiqueta-loc">${loc}</div>` : ''}
+        </div>
       `;
       allLabels.push(label);
     }
